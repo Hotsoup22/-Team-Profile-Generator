@@ -1,28 +1,22 @@
-const Employee = require("./lib/Employee");
- const Manager = require("./lib/Manager");
- const Engineer = require("./lib/Engineer");
- const Intern = require("./lib/Intern");
-  let teamMembers = [];
- 
- const generateHtml = require('./src/indexTemplate');
-
-// const fileIO = new FileIO();
-
-// // TODO: Include packages needed for this application
-
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+const generateHtml = require('./src/generateHtml');
 const inquirer = require("inquirer");
+
+let teamMembers = [];
 
 // TODO: Create an array of questions for user input
 const managerQuestions = [
   {
     type: "input",
-    message: "What is the name of the team's Manager?",
-    name: "name",
+    message: "what is the team manager's id?",
+    name: "id",
   },
   {
     type: "input",
-    message: "what is the team manager's id?",
-    name: "id",
+    message: "What is the name of the team's Manager?",
+    name: "name",
   },
   {
     type: "input",
@@ -32,9 +26,10 @@ const managerQuestions = [
   {
     type: "input",
     message: "What is the team Manager's office Number?",
-    name: "officeNum",
+    name: "officeNumber",
   },
 ];
+
 const addMemberQ = [
   {
     type: "list",
@@ -43,6 +38,7 @@ const addMemberQ = [
     choices: ["Engineer", "Intern", "no more new peeps", "Manager"],
   },
 ];
+
 const engineerQuestions = [
   {
     type: "input",
@@ -65,6 +61,7 @@ const engineerQuestions = [
     name: "userName",
   },
 ];
+
 const internQuestions = [
   {
     type: "input",
@@ -90,18 +87,18 @@ const internQuestions = [
 
 
 const promptMenu = () => {
-  writeToFile();
+
   inquirer.prompt(addMemberQ).then((addMemberAnswer) => {
+    // writeToFile(teamMembers);
     //THEN to use their answers to decide what to do next.
     addMemberAnswer = addMemberAnswer.addMember;
-    //  writeToFile(addMemberAnswer);
+
     if (addMemberAnswer === "Engineer") {
-      //add Engineer to html card. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       return promptEngineerQuestions();
     } else if (addMemberAnswer === "Intern") {
       return askForInternInfo();
     } else if(addMemberAnswer === "Manager"){
-      return managerQuestions();
+      return promptManagerQuestions();
     }else if (addMemberAnswer === "no more new peeps"){
       return 
     }else
@@ -113,65 +110,54 @@ const promptMenu = () => {
 
 const promptEngineerQuestions = () => {
   inquirer.prompt(engineerQuestions).then((engineerAnswers) => {
- 
     console.log(engineerAnswers)
-
     teamMembers.push(new Engineer(engineerAnswers));
+      createhtmlCards();
+     
       promptMenu();
 
   });
 };
 
-
 const askForInternInfo = () =>
   inquirer.prompt(internQuestions).then((internsAnswer) => {
   console.log(internsAnswer)
-
     teamMembers.push(new Intern(internsAnswer));
-    
+    createhtmlCards();
+    promptMenu();
+})
+
+function promptManagerQuestions(){
+  inquirer.prompt(managerQuestions).then((managerAnswers) => {
+    console.log(managerAnswers);
+    console.log("before push in manager function")
+    teamMembers.push( new Manager(managerAnswers));
+    console.log("after push in manager function")
+    createhtmlCards();
     return promptMenu();
   })
-
-  
-  function writeToFile() {
-
-    const fs = require("fs");
-    fs.writeFile('./src/indexTemplate.Html', generateHtml(teamMembers), (err) =>
-      err ? console.error(err) : console.log("Success!")
-    );
-  }
-
-  const promptManagerQuestions = () =>
-  inquirer.prompt(managerQuestions).then((managerAnswers) => {
-   
-    // const name = managerAnswers.name;
-    // const id = managerAnswers.id;
-    // const email = managerAnswers.email;
-    // const officeNum = managerAnswers.officeNum;
-    console.log(managerAnswers);
-    // console.log("id " ,id);
-    // console.log("email " , email);
-    // console.log("officeNum ", officeNum);
-    // managerAnswers = [
-    //   name = managerAnswers.name,
-    //   id = managerAnswers.id,
-    //   email = managerAnswers.email,
-    //   officeNum = managerAnswers.officeNum
-    // ],
-    
-   
-   teamMembers.push(new Manager(managerAnswers));
-
-
-   
-    
-    promptMenu();
-    // AND  THEN new to ask the users what they want to do next. (`inquierer.prompt()` with whatsNextQuestions)
-  })
-
-const init = () =>{
-
-promptManagerQuestions();
+.catch((error) =>{
+})
 }
-    
+
+function createhtmlCards(){
+teamCards =''
+teamMembers.forEach(member => {
+  teamCards += member.teamMemberCard()
+  writeToFile(teamCards)
+});
+}
+
+function writeToFile(teamMemberCard) {
+  const fs = require("fs");
+  fs.writeFile('./dist/index.Html', generateHtml(teamMemberCard), (err) =>{
+    console.log(teamMemberCard)
+    err ? console.error(err) : console.log("Success!")
+  });
+}
+
+ 
+  const init = () =>{promptManagerQuestions();}
+
+
 init();
