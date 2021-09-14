@@ -27,9 +27,11 @@ THEN I exit the application, and the HTML is generated
 install npm required packages, by typing 'npm i' in terminal. 
 ## Usage
 to use type 'node index' into terminal to start program.
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
+    
+[![demoVideo](assets\demo.png)](https://drive.google.com/file/d/1Kp4-qQwpzLPBCvZ6srI1ad8y5GrsF-KK/view)
+click on picture above to watch full video walkthrough of the app.
+
+ 
 ## Credits
 - jose22@gmail.com
 - uw code boot camp
