@@ -29,7 +29,7 @@ install npm required packages, by typing 'npm i' in terminal.
 to use type 'node index' into terminal to start program.
     
 [![demoVideo](assets\demo.png)](https://drive.google.com/file/d/1Kp4-qQwpzLPBCvZ6srI1ad8y5GrsF-KK/view)
-click on picture above to watch full video walkthrough of the app.
+click on the link to watch full video walkthrough of the app.
 
  
 ## Credits
